@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
-//import { Category } from '@category/entity/rating.entity';
+import { Category } from '@category/entity/category.entity';
 
 dotenv.config();
 
