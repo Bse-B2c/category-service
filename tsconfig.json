@@ -18,7 +18,8 @@
 		"paths": {
 			"@src/*": ["./*"],
 			"@middleware/*": ["./middleware/*"],
-			"@common/*": ["./common/*"]
+			"@common/*": ["./common/*"],
+			"@category/*": ["./category/*"],
 		}
 	},
 	"include": ["./**/*.ts"]
