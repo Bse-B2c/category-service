@@ -1,6 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Entity,
+	Column,
+	PrimaryGeneratedColumn,
+	Tree,
+	TreeChildren,
+	TreeParent,
+} from 'typeorm';
 
 @Entity()
+@Tree('nested-set')
 export class Category {
 	@PrimaryGeneratedColumn()
 	id: number;
@@ -14,6 +22,9 @@ export class Category {
 	@Column({ default: new Date() })
 	date: Date;
 
-	@Column()
-	parent: Category;
+	@TreeParent()
+	parent: Category | null;
+
+	@TreeChildren()
+	children: Array<Category>;
 }
