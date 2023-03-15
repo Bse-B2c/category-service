@@ -50,7 +50,7 @@ export class CategoryController {
 			const response = await this.service.find({
 				...search,
 				orderBy: orderBy ?? 'name',
-				sortOrder: sortOrder ?? 'desc',
+				sortOrder: sortOrder ?? 'asc',
 				limit: limit || 10,
 				page: page || 0,
 			});
@@ -69,6 +69,30 @@ export class CategoryController {
 			const { id } = req.params;
 			const response = await this.service.delete(+id);
 
+			return res.status(HttpStatusCode.OK).send({
+				statusCode: HttpStatusCode.OK,
+				error: null,
+				data: response,
+			});
+		} catch (e) {
+			next(e);
+		}
+	};
+
+	update = async (req: Request, res: Response, next: NextFunction) => {
+		console.log('aqui');
+		try {
+			const {
+				body: { name, description, parentId },
+				params: { id },
+			} = req;
+
+			const response = await this.service.update(+id, {
+				name,
+				description,
+				parentId,
+			});
+			console.log('aqui');
 			return res.status(HttpStatusCode.OK).send({
 				statusCode: HttpStatusCode.OK,
 				error: null,

@@ -18,7 +18,12 @@ const validateQuery = validate('query');
 router.get('/', validateQuery(SearchDto), categoryController.find);
 router.get('/:id', validateParams(ParamsDto), categoryController.findOne);
 router.delete('/:id', validateParams(ParamsDto), categoryController.delete);
-//router.patch
+router.patch(
+	'/:id',
+	validateParams(ParamsDto),
+	validateBody(UpdateCategoryDto),
+	categoryController.update
+);
 router.post('/', validateBody(CategoryDto), categoryController.create);
 
 export default router;

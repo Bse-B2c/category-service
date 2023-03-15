@@ -59,7 +59,7 @@ export class CategoryService implements Service {
 			limit = 10,
 			page = 0,
 			orderBy = 'name',
-			sortOrder = 'desc',
+			sortOrder = 'asc',
 		} = search;
 		let where: FindOptionsWhere<Category> = {};
 
@@ -83,11 +83,38 @@ export class CategoryService implements Service {
 			skip: limit * page,
 		});
 	};
+
 	delete = async (id: number) => {
 		const category = await this.findOne(id);
 		await this.repository.delete(id);
 
 		return category;
 	};
-	//update
+
+	update = async (
+		id: number,
+		updateCategory: UpdateCategoryDto
+	): Promise<Category> => {
+		let parent = null;
+		const category = await this.findOne(id);
+		console.log(updateCategory.parentId);
+
+		if (category?.parent?.id === updateCategory.parentId) {
+			parent = category.parent;
+		} else if (updateCategory.parentId) {
+			parent = await this.findOne(updateCategory.parentId);
+		}
+
+		console.log(parent);
+		Object.assign(category, {
+			date: new Date(),
+			description:
+				updateCategory.description !== undefined
+					? updateCategory.description
+					: '',
+			name: updateCategory.name,
+			parent: parent,
+		});
+		return this.repository.save(category);
+	};
 }
