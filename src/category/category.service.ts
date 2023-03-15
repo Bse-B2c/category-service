@@ -1,7 +1,14 @@
 import { CategoryService as Service } from '@category/interfaces/categoryService.interface';
 import { CategoryDto } from '@src/category/dtos/category.dto';
 import { Category } from '@category/entity/category.entity';
-import { TreeRepository } from 'typeorm';
+import {
+	FindOptionsWhere,
+	TreeRepository,
+	In,
+	Like,
+	MoreThanOrEqual,
+	Equal,
+} from 'typeorm';
 import { HttpException, HttpStatusCode } from '@bse-b2c/common';
 import { UpdateCategoryDto } from '@category/dtos/updateCategory.dto';
 import { SearchDto } from '@category/dtos/search.dto';
@@ -33,7 +40,6 @@ export class CategoryService implements Service {
 		});
 		return this.repository.save(newCategory);
 	};
-	//find
 	findOne = async (id: number): Promise<Category> => {
 		const category = await this.repository.findOne({ where: { id } });
 		if (!category)
@@ -42,6 +48,40 @@ export class CategoryService implements Service {
 				message: `Category ${id} not found`,
 			});
 		return category;
+	};
+	find = async (search: SearchDto): Promise<Array<Category>> => {
+		const {
+			ids,
+			name,
+			description,
+			date,
+			parentId,
+			limit = 10,
+			page = 0,
+			orderBy = 'name',
+			sortOrder = 'desc',
+		} = search;
+		let where: FindOptionsWhere<Category> = {};
+
+		if (ids) where = { ...where, id: In(ids) };
+
+		if (name) where = { ...where, name: Equal(name) };
+
+		if (description)
+			where = { ...where, description: Like(`%${description}%`) };
+
+		if (date) where = { ...where, date: MoreThanOrEqual(new Date(date)) };
+
+		if (parentId) where = { ...where, parent: Equal(parentId) };
+
+		return this.repository.find({
+			relations: { parent: true },
+			loadRelationIds: true,
+			where,
+			order: { [orderBy]: sortOrder },
+			take: limit,
+			skip: limit * page,
+		});
 	};
 	/*delete
     update*/
