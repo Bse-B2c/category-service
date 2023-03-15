@@ -15,9 +15,9 @@ const validateBody = validate('body');
 const validateParams = validate('params');
 const validateQuery = validate('query');
 
-router.get('/', validateBody(SearchDto), categoryController.find);
+router.get('/', validateQuery(SearchDto), categoryController.find);
 router.get('/:id', validateParams(ParamsDto), categoryController.findOne);
-//router.delete
+router.delete('/:id', validateParams(ParamsDto), categoryController.delete);
 //router.patch
 router.post('/', validateBody(CategoryDto), categoryController.create);
 

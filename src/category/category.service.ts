@@ -83,6 +83,11 @@ export class CategoryService implements Service {
 			skip: limit * page,
 		});
 	};
-	/*delete
-    update*/
+	delete = async (id: number) => {
+		const category = await this.findOne(id);
+		await this.repository.delete(id);
+
+		return category;
+	};
+	//update
 }
