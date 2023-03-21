@@ -38,6 +38,7 @@ export class CategoryService implements Service {
 			description,
 			parent,
 		});
+
 		return this.repository.save(newCategory);
 	};
 	findOne = async (id: number): Promise<Category> => {
@@ -49,6 +50,11 @@ export class CategoryService implements Service {
 			});
 		return category;
 	};
+
+	findTree = async (): Promise<Array<Category>> => {
+		return this.repository.findTrees();
+	};
+
 	find = async (search: SearchDto): Promise<Array<Category>> => {
 		const {
 			ids,
@@ -97,7 +103,6 @@ export class CategoryService implements Service {
 	): Promise<Category> => {
 		let parent = null;
 		const category = await this.findOne(id);
-		console.log(updateCategory.parentId);
 
 		if (category?.parent?.id === updateCategory.parentId) {
 			parent = category.parent;
@@ -105,7 +110,6 @@ export class CategoryService implements Service {
 			parent = await this.findOne(updateCategory.parentId);
 		}
 
-		console.log(parent);
 		Object.assign(category, {
 			date: new Date(),
 			description:

@@ -16,6 +16,7 @@ const validateParams = validate('params');
 const validateQuery = validate('query');
 
 router.get('/', validateQuery(SearchDto), categoryController.find);
+router.get('/tree', categoryController.findTree);
 router.get('/:id', validateParams(ParamsDto), categoryController.findOne);
 router.delete('/:id', validateParams(ParamsDto), categoryController.delete);
 router.patch(

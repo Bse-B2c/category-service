@@ -11,5 +11,5 @@ export class UpdateCategoryDto {
 
 	@IsOptional()
 	@IsNumber()
-	parentId: number | null;
+	parentId: number;
 }

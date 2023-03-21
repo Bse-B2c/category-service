@@ -42,6 +42,20 @@ export class CategoryController {
 		}
 	};
 
+	findTree = async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const response = await this.service.findTree();
+
+			return res.status(HttpStatusCode.OK).send({
+				statusCode: HttpStatusCode.OK,
+				error: null,
+				data: response,
+			});
+		} catch (e) {
+			next(e);
+		}
+	};
+
 	find = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const { orderBy, sortOrder, limit, page, ...search } =
@@ -80,7 +94,6 @@ export class CategoryController {
 	};
 
 	update = async (req: Request, res: Response, next: NextFunction) => {
-		console.log('aqui');
 		try {
 			const {
 				body: { name, description, parentId },
@@ -92,7 +105,7 @@ export class CategoryController {
 				description,
 				parentId,
 			});
-			console.log('aqui');
+
 			return res.status(HttpStatusCode.OK).send({
 				statusCode: HttpStatusCode.OK,
 				error: null,

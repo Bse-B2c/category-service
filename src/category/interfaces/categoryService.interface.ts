@@ -6,6 +6,7 @@ export interface CategoryService {
 	create(category: CategoryDto): Promise<Category>;
 	findOne(id: number): Promise<Category>;
 	delete(id: number): Promise<Category>;
-	update(id: number, category: UpdateCategoryDto): Promise<Category>;
+	update(id: number, updateCategory: UpdateCategoryDto): Promise<Category>;
 	find(search: SearchDto): Promise<Array<Category>>;
+	findTree(): Promise<Array<Category>>;
 }
